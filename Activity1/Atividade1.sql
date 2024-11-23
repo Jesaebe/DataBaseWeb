@@ -61,7 +61,7 @@ SELECT TRUNCATE (
 	2) Percent;
 
 
-/******* ATIVIDADE 4 ********/
+/******* ATIVIDADE 4 - EXISTS ********/
 SELECT p.codProduto, p.nome
 FROM produto p
 WHERE EXISTS (
@@ -69,6 +69,14 @@ WHERE EXISTS (
 	FROM trocaproduto tp
 	WHERE tp.codProdutoVenda = p.codProduto
 	);
+
+
+/******* ATIVIDADE 4 - ALL ********/
+SELECT p.codProduto, p.nome
+FROM produto p
+WHERE p.codProduto = ANY (
+	SELECT tp.codProdutoVenda 
+	FROM trocaproduto tp);
 
 
 /******* ATIVIDADE 5 ********/
