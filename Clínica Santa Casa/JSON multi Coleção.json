@@ -2,8 +2,9 @@
 
 /*** AGENDAMENTO ***/
 {
+	"_id": "1",
 	"CNPJ": "12345678000195",
-  "CPF": "12345678901",
+	"CPF": "12345678901",
 	"dataSolicitacao": "2024-08-01",
 	"observacoes": "Paciente apresenta tosse leve.",
 	"dataAvaliacao": "2024-08-03",
@@ -12,19 +13,18 @@
 	"status": "finalizado",
 	"tipoExame": "admissional",
 	"dataAgendamento": "2024-04-01",
-  "exames": [
-    {
-      "_id": "1",
-      "ULR_resultado_Laboratorial": "NULL"
-    }
+	"exames": [
+		{
+		  "exame_id": "1",
+		  "ULR_resultado_Laboratorial": "NULL"
+		}
   ],
-  "ULR_resultado_Laboratorial": "NULL",
-	"fk_Medico": "CRM001"
+	"medico_id": "CRM001"
 },
 
 /*** PACIENTE ***/
 {
-  "CPF": "12345678901",
+  "_id": "12345678901",
   "nome": "Maria Silva",
   "telefone": "11987654321",
   "dtNasc": "1980-05-10",
@@ -52,9 +52,9 @@
 
 /*** EMPRESA ***/
 {
+    "_id": "12345678000195",
     "telefone": "1134567890",
     "razaoSocial": "Empresa ABC",
-    "CNPJ": "12345678000195",
     "email": "contato@empresaabc.com",
     "endereco": {
         "logradouro": "Rua das Flores",
@@ -69,7 +69,7 @@
 
 /*** MEDICO ***/
 {
-  "CRM": "CRM001",
+  "_id": "CRM001",
   "nome": "Dr. Carlos Alberto",
   "telefone": "11987654324",
   "email": "dr.carlos@example.com"
@@ -77,6 +77,10 @@
 
 /*** Exame ***/
 {
-  "codExame": "1",
+  "_id": "1",
   "especialidade": "Cardiologia"
 }
+
+
+
+
