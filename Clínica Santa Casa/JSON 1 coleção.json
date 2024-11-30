@@ -1,0 +1,67 @@
+{
+	"_id": 1,
+	"dataAgendamento": "2024-04-01",
+	"agendamento": [
+		{
+			"empresa": {
+			"telefone": "1134567890",
+			"razaoSocial": "Empresa ABC",
+			"CNPJ": "12345678000195",
+			"email": "contato@empresaabc.com",
+			"endereco": {
+					"logradouro": "Rua das Flores",
+					"complemento": "Apto 101",
+					"numero": "123",
+					"CEP": "12345-678",
+					"cidade": "São Paulo",
+					"bairro": "Centro",
+					"uf": "SP"
+				}
+			},
+			"paciente": {
+				"CPF": "12345678901",
+				"nome": "Maria Silva",
+				"telefone": "11987654321",
+				"dtNasc": "1980-05-10",
+				"email": "maria.silva@example.com",
+				"endereco": {
+					"logradouro": "Rua das Flores",
+					"complemento": "Apto 101",
+					"numero": "123",
+					"CEP": "12345-678",
+					"cidade": "São Paulo",
+					"bairro": "Centro",
+					"uf": "SP"
+				},
+				"cargo": {
+					"nomeCargo": "Enfermeiro",
+					"dataEntrada": "2024-11-28",
+					"dataSaida": "2024-11-28",
+					"riscos": [
+						"Ruído"
+					]
+				}
+			},
+			"dataSolicitacao": "2024-08-01",
+			"observacoes": "Paciente apresenta tosse leve.",
+			"dataAvaliacao": "2024-08-03",
+			"parecer": "apto",
+			"dataRealizacaoExame": "2024-08-02",
+			"status": "finalizado",
+			"tipoExame": "admissional",
+			"exames": [
+				{
+					"especialidade": "Cardiologia",
+					"ULR_resultado_Laboratorial": "NULL",
+				}
+			],  
+			"medico": {
+				"CRM": "CRM001",
+				"nome": "Dr. Carlos Alberto",
+				"telefone": "11987654324",
+				"email": "dr.carlos@example.com"
+			}
+		}
+	]
+}
+
