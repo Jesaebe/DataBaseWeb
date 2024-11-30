@@ -72,21 +72,57 @@ db.Agendamento.aggregate([
 ]);
 
 /* 4- Qual foi o médico que mais gerou atestado no ano de 2024? */
-SELECT m.nome, COUNT(*) QTD
-FROM Medico m 
-INNER JOIN Agendamento a ON a.fk_Medico = m.CRM 
-WHERE a.status = :status AND YEAR(a.dataRealizacaoExame) = :ano
-GROUP BY m.nome 
-HAVING QTD = (
-	SELECT MAX(QTD)
-	FROM (
-		SELECT m.nome, COUNT(*) QTD
-		FROM Medico m 
-		INNER JOIN Agendamento a ON a.fk_Medico = m.CRM 
-		WHERE a.status = :status AND YEAR(a.dataRealizacaoExame) = :ano
-		GROUP BY m.nome
-	) Quantidade
-); 
+db.Agendamento.aggregate([
+  {
+    $lookup: {
+      from: "Medico",
+      localField: "medico",
+      foreignField: "_id",
+      as: "listamedicos"
+    }
+  },
+  {
+    $match: {
+      $expr: {
+        $and: [
+          {               
+            $eq: [{$year: "$dataRealizacao"}, 2024]              
+          },
+          {               
+            $eq: ["$status", "finalizado"]              
+          },
+        ]
+      },                           
+    }  
+  },
+  {
+    $unwind: "$listamedicos"
+  },
+  {
+    $group: {
+      _id: "$listamedicos.nome",
+      qtd: {
+          $push: "$listamedicos.nome"
+      }
+    }
+  },
+  {
+    $project: {
+      _id: 1,
+      total: {
+      	$size: "$qtd"
+      }
+    }
+  },
+  {
+    $sort: {
+       total: -1   
+    }
+  },
+  {
+    $limit: 1
+  }
+]);
 
 /* 5- Qual o total de pacientes que realizaram exame em 2024? Mostrar o total para cada mês do ano.*/
 SELECT MONTHNAME(a.dataRealizacaoExame) Mes, COUNT(*) QTD 
@@ -95,21 +131,60 @@ WHERE YEAR(a.dataRealizacaoExame) = :ano
 GROUP BY Mes;
 
 /* 6- Qual a empresa que mais realizou agendamento no mês de junho/2024? */
-SELECT e.CNPJ, e.razaoSocial, COUNT(*) QTD 
-FROM Empresa e 
-INNER JOIN Agendamento a ON a.fk_CNPJ = e.CNPJ
-WHERE MONTH(a.dataAgendamento) = :mes AND YEAR(a.dataAgendamento) = :ano 
-GROUP BY e.CNPJ, e.razaoSocial
-HAVING QTD = (
-	SELECT MAX(QTD)
-	FROM (
-		SELECT e.CNPJ, e.razaoSocial, COUNT(*) QTD 
-		FROM Empresa e 
-		INNER JOIN Agendamento a ON a.fk_CNPJ = e.CNPJ
-		WHERE MONTH(a.dataAgendamento) = :mes AND YEAR(a.dataAgendamento) = :ano 
-		GROUP BY e.CNPJ, e.razaoSocial
-	) Quantidade
-);
+db.Agendamento.aggregate([
+  {
+    $lookup: {
+        from: "Empresa",
+        localField: "empresa",
+        foreignField: "_id",
+        as: "listaempresa"
+    }
+  },
+  {
+    $match: {
+      $expr: {
+        $and: [
+          {               
+            $eq: [{$year: "$dataRealizacao"}, 2024]              
+          },
+          {               
+            $eq: [{$month: "$dataRealizacao"}, 8]              
+          },
+        ]
+      },                           
+    }  
+  },
+  {
+    $unwind: "$listaempresa"
+  },
+  {
+    $group: {
+      _id: [
+        "$listaempresa._id",
+        "$listaempresa.razaoSocial"
+      ],
+      qtd: {
+        $push: "$listaempresa._id"
+      }       
+    }
+  },
+  {
+    $project: {
+      _id: 1,
+      total: {
+        $size: "$qtd"
+      }
+    }
+  },    
+  {
+    $sort: {
+     total: -1   
+    }
+  },
+  {
+    $limit: 1
+  }   
+]);
 
 /* 7- Quais agendamentos ainda não foram finalizados? Exibir nome e CPF do paciente,
 razão social e CNPJ da empresa, status, data de solicitação e o tipo do exame que foi
@@ -132,11 +207,36 @@ INNER JOIN Agendamento a ON a.fk_CNPJ = e.CNPJ
 WHERE e.CNPJ = :cnpj AND a.status = :status;
 
 /* 10- Qual a quantidade de agendamento realizado para cada tipo de exame em X ano? */
-SELECT a.tipoExame, COUNT(*)
-FROM Agendamento a 
-WHERE YEAR(a.dataSolicitacao) = :ano
-GROUP BY a.tipoExame;
-
+db.Agendamento.aggregate([
+  {
+    $match: {
+      $expr: {
+        $eq: [{$year: "$dataSolicitacao"}, 2024]              
+      }
+    }  
+  },
+  {   
+    $group: {
+      _id: "$tipoExame",
+      qtd: {
+        $push: "$tipoExame"
+      }
+    } 
+  },
+  {
+    $project: {
+        _id: 1,
+        total: {
+            $size: "$qtd"
+        }
+    }
+  }, 
+  {
+    $sort: {
+      total: -1
+    }
+  }
+]);
 
 
 
